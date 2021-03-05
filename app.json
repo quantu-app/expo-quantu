@@ -1,0 +1,12 @@
+{
+  "name": "expo-quantu",
+  "displayName": "expo-quantu",
+  "expo": {
+    "name": "expo-quantu",
+    "slug": "expo-quantu",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
