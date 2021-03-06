@@ -2,46 +2,96 @@ import {
   decksAllForCreatorAction,
   decksCreateAction,
   decksDeleteAction,
+  decksGetAction,
+  decksUpdateAction,
 } from "./actions";
 import { store } from "..";
+import { IDeckJSON } from "./definitions";
+import { debounce } from "@aicacia/debounce";
 
-export function decksAllForCreator(creatorId: string) {
-  store.dispatch(decksAllForCreatorAction.pending.create(creatorId));
-  setTimeout(() => {
-    store.dispatch(
-      decksAllForCreatorAction.success.create([
-        {
-          id: ++ID,
-          creator_id: creatorId,
-          name: "Test",
-          created_at: "2021-03-06T13:47:55.580Z",
-          updated_at: "2021-03-06T13:47:55.580Z",
-        },
-      ])
-    );
-  }, 1000);
+function wait(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
-let ID = 0;
+export async function decksGet(id: number) {
+  store.dispatch(decksGetAction.pending.create(id));
+  await wait(1000);
+  store.dispatch(
+    decksGetAction.success.create({
+      id: 1,
+      creator_id: "487a1226-7728-4bb8-96fa-c5d428b9b98a",
+      name: "Test",
+      created_at: "2021-03-06T13:47:55.580Z",
+      updated_at: "2021-03-06T13:47:55.580Z",
+    })
+  );
+}
 
-export function decksCreate() {
-  store.dispatch(decksCreateAction.pending.create(undefined));
-  setTimeout(() => {
-    store.dispatch(
-      decksCreateAction.success.create({
-        id: ++ID,
-        creator_id: "487a1226-7728-4bb8-96fa-c5d428b9b98a",
-        name: "New Deck",
+export async function decksAllForCreator(creatorId: string) {
+  store.dispatch(decksAllForCreatorAction.pending.create(creatorId));
+  await wait(1000);
+  store.dispatch(
+    decksAllForCreatorAction.success.create([
+      {
+        id: 1,
+        creator_id: creatorId,
+        name: "Test",
         created_at: "2021-03-06T13:47:55.580Z",
         updated_at: "2021-03-06T13:47:55.580Z",
-      })
-    );
-  }, 1000);
+      },
+    ])
+  );
 }
 
-export function decksDelete(deckId: number) {
+export async function decksCreate() {
+  store.dispatch(decksCreateAction.pending.create(undefined));
+  await wait(1000);
+  store.dispatch(
+    decksCreateAction.success.create({
+      id: 1,
+      creator_id: "487a1226-7728-4bb8-96fa-c5d428b9b98a",
+      name: "New Deck",
+      created_at: "2021-03-06T13:47:55.580Z",
+      updated_at: "2021-03-06T13:47:55.580Z",
+    })
+  );
+}
+
+export async function decksUpdate(id: number, deck: Partial<IDeckJSON>) {
+  store.dispatch(decksUpdateAction.pending.create({ id, deck }));
+  await wait(1000);
+  store.dispatch(
+    decksUpdateAction.success.create({
+      id: 1,
+      creator_id: "487a1226-7728-4bb8-96fa-c5d428b9b98a",
+      name: "Test",
+      created_at: "2021-03-06T13:47:55.580Z",
+      ...deck,
+      updated_at: new Date().toJSON(),
+    })
+  );
+}
+
+export const debouncedDecksUpdate = debounce(
+  async (id: number, deck: Partial<IDeckJSON>) => {
+    store.dispatch(decksUpdateAction.pending.create({ id, deck }));
+    await wait(1000);
+    store.dispatch(
+      decksUpdateAction.success.create({
+        id: 1,
+        creator_id: "487a1226-7728-4bb8-96fa-c5d428b9b98a",
+        name: "Test",
+        created_at: "2021-03-06T13:47:55.580Z",
+        ...deck,
+        updated_at: new Date().toJSON(),
+      })
+    );
+  },
+  1000
+);
+
+export async function decksDelete(deckId: number) {
   store.dispatch(decksDeleteAction.pending.create(deckId));
-  setTimeout(() => {
-    store.dispatch(decksDeleteAction.success.create(undefined));
-  }, 1000);
+  await wait(1000);
+  store.dispatch(decksDeleteAction.success.create(undefined));
 }

@@ -9,6 +9,14 @@ export const decksAllForCreatorAction = createAsynAction<
   Array<IDeckJSON>
 >(DECKS_ALL_FOR_CREATOR);
 
+export const DECKS_GET = "decks.get";
+
+export const decksGetAction = createAsynAction<
+  typeof DECKS_GET,
+  number,
+  IDeckJSON
+>(DECKS_GET);
+
 export const DECKS_CREATE = "decks.create";
 
 export const decksCreateAction = createAsynAction<
@@ -16,6 +24,14 @@ export const decksCreateAction = createAsynAction<
   undefined,
   IDeckJSON
 >(DECKS_CREATE);
+
+export const DECKS_UPDATE = "decks.update";
+
+export const decksUpdateAction = createAsynAction<
+  typeof DECKS_UPDATE,
+  { id: number; deck: Partial<IDeckJSON> },
+  IDeckJSON
+>(DECKS_UPDATE);
 
 export const DECKS_DELETE = "decks.delete";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Text } from "@ui-kitten/components";
 import { View } from "react-native";
 
@@ -8,7 +8,7 @@ export interface IJSErrorProps {
   error: Error;
 }
 
-export function JSError(props: IJSErrorProps) {
+export const JSError = memo((props: IJSErrorProps) => {
   console.error(props.error);
 
   return (
@@ -22,4 +22,4 @@ export function JSError(props: IJSErrorProps) {
       </View>
     </>
   );
-}
+});

@@ -4,6 +4,7 @@ import {
   decksAllForCreatorAction,
   decksCreateAction,
   decksDeleteAction,
+  decksGetAction,
 } from "./actions";
 import {
   IDecks,
@@ -26,8 +27,17 @@ export function reducer(
     return state
       .update("byId", (byId) => byId.merge(decksById(decks)))
       .update("byCreatorId", (byCreatorId) =>
-        byCreatorId.mergeDeep(decksByCreatorId(decks))
+        byCreatorId.merge(decksByCreatorId(decks))
       );
+  } else if (decksGetAction.success.is(action)) {
+    const deck = deckFromJSON(action.payload);
+    return state
+      .update("byId", (byId) => byId.set(deck.id, deck))
+      .update("byCreatorId", (byCreatorId) => {
+        const decks =
+          byCreatorId.get(deck.creatorId) || OrderedSet<RecordOf<IDeck>>();
+        return byCreatorId.set(deck.creatorId, decks.add(deck));
+      });
   } else if (decksCreateAction.success.is(action)) {
     const deck = deckFromJSON(action.payload);
     return state
@@ -38,14 +48,18 @@ export function reducer(
         return byCreatorId.set(deck.creatorId, decks.add(deck));
       });
   } else if (decksDeleteAction.pending.is(action)) {
-    const deck = state.byId.get(action.payload) as RecordOf<IDeck>;
-    return state
-      .update("byId", (byId) => byId.delete(deck.id))
-      .update("byCreatorId", (byCreatorId) => {
-        const decks =
-          byCreatorId.get(deck.creatorId) || OrderedSet<RecordOf<IDeck>>();
-        return byCreatorId.set(deck.creatorId, decks.remove(deck));
-      });
+    const deck = state.byId.get(action.payload);
+    if (deck) {
+      return state
+        .update("byId", (byId) => byId.delete(deck.id))
+        .update("byCreatorId", (byCreatorId) => {
+          const decks =
+            byCreatorId.get(deck.creatorId) || OrderedSet<RecordOf<IDeck>>();
+          return byCreatorId.set(deck.creatorId, decks.remove(deck));
+        });
+    } else {
+      return state;
+    }
   } else {
     return state;
   }

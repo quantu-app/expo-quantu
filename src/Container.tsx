@@ -4,7 +4,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
-import React, { ReactNode } from "react";
+import React, { memo, ReactNode } from "react";
 import { LARGE_WIDTH } from "./constants";
 
 const styles = StyleSheet.create({
@@ -29,7 +29,7 @@ export interface IContainerProps {
   children: ReactNode;
 }
 
-export function Container(props: IContainerProps) {
+export const Container = memo((props: IContainerProps) => {
   const windowDimensions = useWindowDimensions();
 
   return (
@@ -41,4 +41,4 @@ export function Container(props: IContainerProps) {
       </View>
     </ScrollView>
   );
-}
+});

@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  web:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -28,3 +28,42 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./web-build
           cname: quantu.app
+
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: cargo install tauri-bundler --force
+
+      - if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webkit2gtk-4.0
+
+      - run: npm i
+      - run: npm run build.web
+      - run: cp web/404.html web-build
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          distPath: ../web-build
+          tagName: quantu-latest
+          releaseName: QuantU latest
+          prerelease: false

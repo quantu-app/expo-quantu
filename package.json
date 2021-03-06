@@ -4,8 +4,13 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "web": "expo start --web",
+    "desktop": "npm run tauri dev",
     "start": "react-native start",
+    "expo-android": "expo start --android",
+    "expo-ios": "expo start --ios",
     "build.web": "expo build:web",
+    "build.desktop": "npm run build.web && npm run tauri build",
+    "tauri": "tauri",
     "lint": "eslint . --fix",
     "prettier": "prettier --ignore-path ./.eslintignore --ignore-unknown --write .",
     "preCommit": "npm run prettier && npm run lint"
@@ -41,9 +46,9 @@
     "react-native-gesture-handler": "~1.8.0",
     "react-native-reanimated": "~1.13.0",
     "react-native-screens": "~2.15.2",
-    "react-native-svg": "12.1.0",
+    "react-native-svg": "^9.13.6",
     "react-native-unimodules": "~0.12.0",
-    "react-native-web": "^0.15.0",
+    "react-native-web": "~0.13.12",
     "react-native-webview": "11.0.0",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8"
@@ -67,6 +72,7 @@
     "husky": "^4.3.8",
     "jest-expo": "^40.0.0",
     "prettier": "^2.2.1",
+    "tauri": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "~4.0.0"
   },

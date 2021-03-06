@@ -16,3 +16,11 @@ export const questionCreateAction = createAsynAction<
   { type: QuestionType; deckId: number },
   IQuestionJSON
 >(QUESTIONS_CREATE);
+
+export const QUESTIONS_DELETE = "questions.delete";
+
+export const questionsDeleteAction = createAsynAction<
+  typeof QUESTIONS_DELETE,
+  number,
+  undefined
+>(QUESTIONS_DELETE);

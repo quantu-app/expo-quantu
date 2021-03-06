@@ -1,58 +1,20 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import {
-  Modal,
-  Button,
-  Icon,
-  Card,
-  Input,
-  Text,
-  Spinner,
-} from "@ui-kitten/components";
-import { SMALL_WIDTH } from "./constants";
+import { Button, Icon, Input, Spinner } from "@ui-kitten/components";
 import { useReduxStore } from "./state";
 import { userSetSignInUpModal } from "./state/user/functions";
 import { selectIsSignInUpModalOpen } from "./state/user/selectors";
+import { ModalSmall } from "./Modal";
 
 const styles = StyleSheet.create({
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modal: {
-    width: SMALL_WIDTH * 0.5,
-  },
-  header: {
-    marginBottom: 16,
-  },
-  close: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-  },
   signIn: {
     marginTop: 32,
   },
 });
 
-export const SignInUp = memo(() => {
-  const isSignInUpModalOpen = useReduxStore(selectIsSignInUpModalOpen);
-
-  return (
-    <Modal
-      style={styles.modal}
-      visible={isSignInUpModalOpen}
-      onBackdropPress={() => userSetSignInUpModal(false)}
-      backdropStyle={styles.backdrop}
-    >
-      <Card disabled>
-        <SignIn />
-      </Card>
-    </Modal>
-  );
-});
-
-function SignIn() {
-  const [loading, setLoading] = useState(false),
+export function SignInUp() {
+  const isSignInUpModalOpen = useReduxStore(selectIsSignInUpModalOpen),
+    [loading, setLoading] = useState(false),
     [usernameOrEmail, setUsernameOrEmail] = useState(""),
     [password, setPassword] = useState(""),
     [showPassword, setShowPassword] = useState(false);
@@ -63,18 +25,11 @@ function SignIn() {
   }, [usernameOrEmail, password]);
 
   return (
-    <>
-      <Text category="h2" style={styles.header}>
-        Sign in
-      </Text>
-      <Button
-        style={styles.close}
-        appearance="ghost"
-        size="small"
-        status="danger"
-        onPress={() => userSetSignInUpModal(false)}
-        accessoryLeft={(props) => <Icon {...props} name="close" />}
-      />
+    <ModalSmall
+      title="Sign in"
+      open={isSignInUpModalOpen}
+      onClose={() => userSetSignInUpModal(false)}
+    >
       <View>
         <Input
           label="Username or Email"
@@ -104,7 +59,7 @@ function SignIn() {
           Sign in
         </Button>
       </View>
-    </>
+    </ModalSmall>
   );
 }
 

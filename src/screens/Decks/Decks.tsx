@@ -1,43 +1,28 @@
 import React, { useMemo, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import {
+  Text,
   Icon,
   List,
   Button,
   ListItem,
   Input,
-  Modal,
-  Card,
+  Divider,
 } from "@ui-kitten/components";
-import { DECKS_SCREEN, ParamList } from "../../navigationConfig";
 import { decksAllForCreator, decksDelete } from "../../state/decks/functions";
 import { useReduxStore } from "../../state";
 import { selectUser } from "../../state/user/selectors";
 import { selectDecks } from "../../state/decks/selectors";
 import { RecordOf } from "immutable";
 import { IDeck } from "../../state/decks/definitions";
-import { SMALL_WIDTH } from "../../constants";
+import { NavigationProp, useNavigation } from "@react-navigation/core";
+import { DECK_EDIT_SCREEN } from "../../navigationConfig";
+import { ModalSmall } from "../../Modal";
 
-const styles = StyleSheet.create({
-  backdrop: {
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modal: {
-    width: SMALL_WIDTH * 0.5,
-  },
-  header: {
-    marginBottom: 16,
-  },
-  close: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-  },
-});
-
-export function Decks(_props: ParamList[typeof DECKS_SCREEN]) {
+export function Decks() {
   const user = useReduxStore(selectUser),
     decks = useReduxStore(selectDecks),
+    navigation = useNavigation(),
     [search, setSearch] = useState(""),
     [deleteId, setDeleteId] = useState(-1),
     [filteredDecks, setFilteredDecks] = useState<RecordOf<IDeck>[]>([]);
@@ -54,9 +39,7 @@ export function Decks(_props: ParamList[typeof DECKS_SCREEN]) {
     [decks, search]
   );
 
-  useMemo(() => {
-    decksAllForCreator(user.id);
-  }, [user.id]);
+  useMemo(() => decksAllForCreator(user.id), [user.id]);
 
   return (
     <View>
@@ -76,8 +59,13 @@ export function Decks(_props: ParamList[typeof DECKS_SCREEN]) {
       />
       <List
         data={filteredDecks}
+        ItemSeparatorComponent={Divider}
         renderItem={({ item }) => (
-          <DeckItem deck={item} setDeleteId={setDeleteId} />
+          <DeckItem
+            deck={item}
+            navigation={navigation}
+            setDeleteId={setDeleteId}
+          />
         )}
       />
       <DeleteModal
@@ -95,6 +83,7 @@ export function Decks(_props: ParamList[typeof DECKS_SCREEN]) {
 
 interface IDeckItemProps {
   deck: RecordOf<IDeck>;
+  navigation: NavigationProp<any>;
   setDeleteId(id: number): void;
 }
 
@@ -107,6 +96,11 @@ function DeckItem(props: IDeckItemProps) {
         <>
           <Button
             size="small"
+            onPress={() =>
+              props.navigation.navigate(DECK_EDIT_SCREEN, {
+                deckId: props.deck.id,
+              })
+            }
             accessoryLeft={(props) => <Icon {...props} name="edit-outline" />}
           />
           <Button
@@ -128,16 +122,22 @@ interface IDeleteModalProps {
 }
 
 function DeleteModal(props: IDeleteModalProps) {
+  const [name, setName] = useState("");
+
   return (
-    <Modal
-      style={styles.modal}
-      visible={!!props.deck}
-      onBackdropPress={props.onClose}
-      backdropStyle={styles.backdrop}
+    <ModalSmall
+      title="Delete this Deck?"
+      open={!!props.deck}
+      onClose={props.onClose}
     >
       {props.deck && (
-        <Card disabled>
+        <>
+          <Text>
+            Enter the name of this deck `{props.deck.name}` to delete Deck.
+          </Text>
+          <Input value={name} onChangeText={setName} />
           <Button
+            disabled={name !== props.deck.name}
             onPress={() => {
               props.onDelete();
               props.onClose;
@@ -145,8 +145,8 @@ function DeleteModal(props: IDeleteModalProps) {
           >
             {`Delete ${props.deck.name}`}
           </Button>
-        </Card>
+        </>
       )}
-    </Modal>
+    </ModalSmall>
   );
 }
