@@ -1,6 +1,14 @@
-import React, { memo, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
-import { Modal, Text, Button, Icon, Card } from "@ui-kitten/components";
+import React, { memo, useCallback, useState } from "react";
+import { StyleSheet, View } from "react-native";
+import {
+  Modal,
+  Button,
+  Icon,
+  Card,
+  Input,
+  Text,
+  Spinner,
+} from "@ui-kitten/components";
 import { SMALL_WIDTH } from "./constants";
 import { useReduxStore } from "./state";
 import { userSetSignInUpModal } from "./state/user/functions";
@@ -21,8 +29,9 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
-  google: { backgroundColor: "#ea4335", borderColor: "transparent" },
-  github: { backgroundColor: "#24292e", borderColor: "transparent" },
+  signIn: {
+    marginTop: 32,
+  },
 });
 
 export const SignInUp = memo(() => {
@@ -43,39 +52,79 @@ export const SignInUp = memo(() => {
 });
 
 function SignIn() {
-  const [loading] = useState(false);
+  const [loading, setLoading] = useState(false),
+    [usernameOrEmail, setUsernameOrEmail] = useState(""),
+    [password, setPassword] = useState(""),
+    [showPassword, setShowPassword] = useState(false);
+
+  const onSignIn = useCallback(() => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 1000);
+  }, [usernameOrEmail, password]);
 
   return (
     <>
-      <View style={styles.header}>
-        <Text category="h3">Sign in with</Text>
-      </View>
+      <Text category="h2" style={styles.header}>
+        Sign in
+      </Text>
       <Button
         style={styles.close}
         appearance="ghost"
+        size="small"
+        status="danger"
         onPress={() => userSetSignInUpModal(false)}
         accessoryLeft={(props) => <Icon {...props} name="close" />}
       />
       <View>
+        <Input
+          label="Username or Email"
+          value={usernameOrEmail}
+          onChangeText={setUsernameOrEmail}
+        />
+        <Input
+          label="Password"
+          secureTextEntry={!showPassword}
+          value={password}
+          onChangeText={setPassword}
+          accessoryRight={(props) => (
+            <EyeButton
+              {...props}
+              showPassword={showPassword}
+              onPress={() => setShowPassword((showPassword) => !showPassword)}
+            />
+          )}
+        />
         <Button
-          style={styles.google}
-          accessoryLeft={(props) => <Icon {...props} name="google" />}
+          style={styles.signIn}
+          accessoryRight={loading ? () => <Spinner size="small" /> : undefined}
           appearance="filled"
           disabled={loading}
+          onPress={onSignIn}
         >
-          Google
+          Sign in
         </Button>
-        {Platform.OS === "web" && (
-          <Button
-            style={styles.github}
-            accessoryLeft={(props) => <Icon {...props} name="github" />}
-            appearance="filled"
-            disabled={loading}
-          >
-            Github
-          </Button>
-        )}
       </View>
     </>
+  );
+}
+
+interface IEyeButtonProps {
+  showPassword: boolean;
+  onPress(): void;
+}
+
+function EyeButton(props: IEyeButtonProps) {
+  return (
+    <Button
+      {...props}
+      appearance="ghost"
+      size="small"
+      accessoryRight={(accessoryProps) => (
+        <Icon
+          {...accessoryProps}
+          name={props.showPassword ? "eye-off-outline" : "eye-outline"}
+        />
+      )}
+    />
   );
 }

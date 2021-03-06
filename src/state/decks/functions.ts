@@ -1,4 +1,8 @@
-import { decksAllForCreatorAction, decksCreateAction } from "./actions";
+import {
+  decksAllForCreatorAction,
+  decksCreateAction,
+  decksDeleteAction,
+} from "./actions";
 import { store } from "..";
 
 export function decksAllForCreator(creatorId: string) {
@@ -32,5 +36,12 @@ export function decksCreate() {
         updated_at: "2021-03-06T13:47:55.580Z",
       })
     );
+  }, 1000);
+}
+
+export function decksDelete(deckId: number) {
+  store.dispatch(decksDeleteAction.pending.create(deckId));
+  setTimeout(() => {
+    store.dispatch(decksDeleteAction.success.create(undefined));
   }, 1000);
 }

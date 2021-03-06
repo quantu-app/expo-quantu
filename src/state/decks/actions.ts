@@ -16,3 +16,11 @@ export const decksCreateAction = createAsynAction<
   undefined,
   IDeckJSON
 >(DECKS_CREATE);
+
+export const DECKS_DELETE = "decks.delete";
+
+export const decksDeleteAction = createAsynAction<
+  typeof DECKS_DELETE,
+  number,
+  undefined
+>(DECKS_DELETE);

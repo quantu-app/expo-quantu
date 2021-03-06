@@ -1,6 +1,10 @@
 import { RecordOf, OrderedSet } from "immutable";
 import { IAction } from "../actions";
-import { decksAllForCreatorAction, decksCreateAction } from "./actions";
+import {
+  decksAllForCreatorAction,
+  decksCreateAction,
+  decksDeleteAction,
+} from "./actions";
 import {
   IDecks,
   Decks,
@@ -8,6 +12,7 @@ import {
   decksFromJSON,
   decksById,
   decksByCreatorId,
+  IDeck,
 } from "./definitions";
 
 export const INITIAL_STATE = Decks();
@@ -28,8 +33,18 @@ export function reducer(
     return state
       .update("byId", (byId) => byId.set(deck.id, deck))
       .update("byCreatorId", (byCreatorId) => {
-        const decks = byCreatorId.get(deck.creatorId) || OrderedSet();
+        const decks =
+          byCreatorId.get(deck.creatorId) || OrderedSet<RecordOf<IDeck>>();
         return byCreatorId.set(deck.creatorId, decks.add(deck));
+      });
+  } else if (decksDeleteAction.pending.is(action)) {
+    const deck = state.byId.get(action.payload) as RecordOf<IDeck>;
+    return state
+      .update("byId", (byId) => byId.delete(deck.id))
+      .update("byCreatorId", (byCreatorId) => {
+        const decks =
+          byCreatorId.get(deck.creatorId) || OrderedSet<RecordOf<IDeck>>();
+        return byCreatorId.set(deck.creatorId, decks.remove(deck));
       });
   } else {
     return state;
