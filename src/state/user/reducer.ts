@@ -10,7 +10,7 @@ export function reducer(
   action: IAction
 ): RecordOf<IUser> {
   if (userSetSignInUpModalAction.is(action)) {
-    return state.set("isSignInUpModalOpen", action.payload.status);
+    return state.set("isSignInUpModalOpen", action.payload);
   } else {
     return state;
   }
