@@ -1,5 +1,5 @@
 export const HOME_SCREEN = "Home",
-  DECKS_SCREEN = "DECKS",
+  DECKS_SCREEN = "Decks",
   DEFAULT_SCREEN = HOME_SCREEN;
 
 export type ParamList = {
