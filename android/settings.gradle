@@ -1,4 +1,4 @@
-rootProject.name = 'expoquantu'
+rootProject.name = 'quantu'
 
 apply from: '../node_modules/react-native-unimodules/gradle.groovy'
 includeUnimodulesProjects()

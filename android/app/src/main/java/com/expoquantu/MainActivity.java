@@ -1,4 +1,4 @@
-package com.expoquantu;
+package app.quantu;
 
 import android.os.Bundle;
 
