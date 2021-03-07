@@ -50,6 +50,7 @@ export function Decks() {
             {...props}
             appearance="ghost"
             size="small"
+            disabled={!search}
             onPress={() => setSearch("")}
             accessoryRight={(props) => <Icon {...props} name="close" />}
           />

@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   },
   close: {
     position: "absolute",
+    padding: 0,
     right: 0,
     top: 0,
   },
@@ -41,8 +42,7 @@ export const ModalSmall = memo((props: IModalSmallProps) => {
         </Text>
         <Button
           style={styles.close}
-          appearance="ghost"
-          size="small"
+          size="tiny"
           status="danger"
           onPress={props.onClose}
           accessoryLeft={(props) => <Icon {...props} name="close" />}

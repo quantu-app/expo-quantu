@@ -30,14 +30,14 @@ const QuestionBaseDefaults = {
 };
 
 export interface IFlashCardQuestion extends IQuestionBase {
-  front: IJSONObject;
-  back: IJSONObject;
+  front: string;
+  back: string;
 }
 
 export const FlashCardQuestion = Record<IFlashCardQuestion>({
   ...QuestionBaseDefaults,
-  front: {},
-  back: {},
+  front: "",
+  back: "",
 });
 
 export function isFlashCardQuestion(

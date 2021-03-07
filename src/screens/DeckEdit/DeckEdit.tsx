@@ -144,8 +144,8 @@ function QuestionDescription(props: IQuestionDescriptionProps) {
   if (isFlashCardQuestion(props.question)) {
     return (
       <>
-        <Text>Front {JSON.stringify(props.question.front)}</Text>
-        <Text>Back {JSON.stringify(props.question.back)}</Text>
+        <Text>Front {props.question.front}</Text>
+        <Text>Back {props.question.back}</Text>
       </>
     );
   } else {
@@ -162,7 +162,7 @@ interface IDeleteModalProps {
 function DeleteModal(props: IDeleteModalProps) {
   return (
     <ModalSmall
-      title="Delete this Question?"
+      title="Delete Question?"
       open={!!props.question}
       onClose={props.onClose}
     >
