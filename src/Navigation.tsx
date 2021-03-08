@@ -24,6 +24,7 @@ import {
   linking,
   ParamList,
   DECK_EDIT_SCREEN,
+  QUESTION_EDIT_SCREEN,
 } from "./navigationConfig";
 import { useReduxStore } from "./state";
 import { selectIsSignedIn, selectUser } from "./state/user/selectors";
@@ -46,6 +47,7 @@ import { userSetSignInUpModal } from "./state/user/functions";
 import { SignInUp } from "./SignInUp";
 import { DecksScreen } from "./screens/Decks/DecksScreen";
 import { DeckEditScreen } from "./screens/DeckEdit/DeckEditScreen";
+import { QuestionEditScreen } from "./screens/QuestionEdit/QuestionEditScreen";
 
 export const PERSISTENCE_KEY = "NAVIGATION_STATE";
 
@@ -120,6 +122,7 @@ function NavigationDrawer() {
       <Screen name={HOME_SCREEN} component={HomeScreen} />
       <Screen name={DECKS_SCREEN} component={DecksScreen} />
       <Screen name={DECK_EDIT_SCREEN} component={DeckEditScreen} />
+      <Screen name={QUESTION_EDIT_SCREEN} component={QuestionEditScreen} />
     </Navigator>
   );
 }

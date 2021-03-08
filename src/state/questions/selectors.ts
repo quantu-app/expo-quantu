@@ -1,10 +1,14 @@
-import { List, RecordOf } from "immutable";
+import { OrderedSet, RecordOf } from "immutable";
 import { IState } from "..";
 import { IQuestion } from "./definitions";
 
-export function selectDeckQuestions(
+export function selectQuestionsByDeckId(
   state: IState,
   deckId: number
-): List<RecordOf<IQuestion>> {
-  return state.questions.byDeckId.get(deckId, List());
+): OrderedSet<RecordOf<IQuestion>> {
+  return state.questions.byDeckId.get(deckId, OrderedSet());
+}
+
+export function selectQuestionById(state: IState, id: number) {
+  return state.questions.byId.get(id);
 }

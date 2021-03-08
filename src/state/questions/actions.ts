@@ -1,6 +1,14 @@
 import { createAsynAction } from "../actions";
 import { IQuestionJSON, QuestionType } from "./definitions";
 
+export const QUESTIONS_GET = "questions.get";
+
+export const questionGetAction = createAsynAction<
+  typeof QUESTIONS_GET,
+  number,
+  IQuestionJSON
+>(QUESTIONS_GET);
+
 export const QUESTIONS_ALL_FOR_DECK = "questions.all-for-deck";
 
 export const questionAllAction = createAsynAction<

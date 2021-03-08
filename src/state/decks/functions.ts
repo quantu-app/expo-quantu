@@ -8,12 +8,16 @@ import {
 import { store } from "..";
 import { IDeckJSON } from "./definitions";
 import { debounce } from "@aicacia/debounce";
+import { selectDeckById } from "./selectors";
 
 function wait(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
-export async function decksGet(id: number) {
+export async function decksGet(id: number, force = false) {
+  if (!force || selectDeckById(store.getState(), id)) {
+    return;
+  }
   store.dispatch(decksGetAction.pending.create(id));
   await wait(1000);
   store.dispatch(

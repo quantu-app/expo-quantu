@@ -1,4 +1,3 @@
-import { IJSONObject } from "@aicacia/json";
 import { List, OrderedMap, OrderedSet, Record, RecordOf } from "immutable";
 
 export enum QuestionType {
@@ -49,8 +48,8 @@ export function isFlashCardQuestion(
 export type IQuestion = IFlashCardQuestion;
 
 export interface IFlashCardQuestionJSON extends IQuestionBaseJSON {
-  front: IJSONObject;
-  back: IJSONObject;
+  front: string;
+  back: string;
 }
 
 export type IQuestionJSON = IFlashCardQuestionJSON;
@@ -63,6 +62,8 @@ export function questionFromJSON(json: IQuestionJSON): RecordOf<IQuestion> {
       deckId: json.deck_id,
       createdAt: new Date(json.created_at),
       updatedAt: new Date(json.updated_at),
+      front: json.front,
+      back: json.back,
     });
   } else {
     throw new TypeError(`Invalid type for Question: ${json.type}`);

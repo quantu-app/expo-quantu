@@ -1,13 +1,34 @@
 import {
+  questionGetAction,
   questionAllAction,
   questionCreateAction,
   questionsDeleteAction,
 } from "./actions";
 import { QuestionType } from "./definitions";
 import { store } from "..";
+import { selectQuestionById } from "./selectors";
 
 function wait(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
+export async function questionsGet(id: number, force = false) {
+  if (!force || selectQuestionById(store.getState(), id)) {
+    return;
+  }
+  store.dispatch(questionGetAction.pending.create(id));
+  await wait(1000);
+  store.dispatch(
+    questionGetAction.success.create({
+      id: 1,
+      type: QuestionType.FlashCard,
+      deck_id: 1,
+      created_at: "2021-03-06T13:47:55.580Z",
+      updated_at: "2021-03-06T13:47:55.580Z",
+      front: "# Front",
+      back: "# Back",
+    })
+  );
 }
 
 export async function questionAllForDeck(deckId: number) {
@@ -21,8 +42,8 @@ export async function questionAllForDeck(deckId: number) {
         deck_id: deckId,
         created_at: "2021-03-06T13:47:55.580Z",
         updated_at: "2021-03-06T13:47:55.580Z",
-        front: {},
-        back: {},
+        front: "# Front",
+        back: "# Back",
       },
     ])
   );
@@ -38,8 +59,8 @@ export async function questionCreate(deckId: number, type: QuestionType) {
       deck_id: deckId,
       created_at: "2021-03-06T13:47:55.580Z",
       updated_at: "2021-03-06T13:47:55.580Z",
-      front: {},
-      back: {},
+      front: "# Front",
+      back: "# Back",
     })
   );
 }

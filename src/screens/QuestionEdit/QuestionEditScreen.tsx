@@ -3,14 +3,19 @@ import { Async } from "@aicacia/async_component-react";
 import { JSError } from "../../JSError";
 import { Loading } from "../../Loading";
 import { Container } from "../../Container";
-import { HOME_SCREEN, ParamList } from "../../navigationConfig";
+import { DECK_EDIT_SCREEN, ParamList } from "../../navigationConfig";
+import { RouteProp } from "@react-navigation/core";
 
-export function HomeScreen(_props: ParamList[typeof HOME_SCREEN]) {
+export function QuestionEditScreen(props: {
+  route: RouteProp<ParamList, typeof DECK_EDIT_SCREEN>;
+}) {
   return (
     <Container>
       <Async
-        promise={import("../Decks/Decks")}
-        onSuccess={({ Decks }) => <Decks />}
+        promise={import("./QuestionEdit")}
+        onSuccess={({ QuestionEdit }) => (
+          <QuestionEdit {...props.route.params} />
+        )}
         onPending={() => <Loading />}
         onError={(error) => <JSError error={error} />}
       />

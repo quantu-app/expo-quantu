@@ -7,7 +7,6 @@ import {
   List,
   Icon,
   TextProps,
-  Text,
   Divider,
 } from "@ui-kitten/components";
 import {
@@ -23,22 +22,23 @@ import {
   questionAllForDeck,
   questionsDelete,
 } from "../../state/questions/functions";
-import { selectDeckQuestions } from "../../state/questions/selectors";
+import { selectQuestionsByDeckId } from "../../state/questions/selectors";
 import { NavigationProp, useNavigation } from "@react-navigation/core";
 import {
   IQuestion,
   isFlashCardQuestion,
 } from "../../state/questions/definitions";
 import { decksGet } from "../../state/decks/functions";
-import { selectDeck } from "../../state/decks/selectors";
+import { selectDeckById } from "../../state/decks/selectors";
 import { IDeck } from "../../state/decks/definitions";
 import { ModalSmall } from "../../Modal";
+import { Markdown } from "../../Markdown";
 
 export function DeckEdit(props: ParamList[typeof DECK_EDIT_SCREEN]) {
   const navigation = useNavigation(),
-    deck = useReduxStore((state) => selectDeck(state, props.deckId)),
+    deck = useReduxStore((state) => selectDeckById(state, props.deckId)),
     questions = useReduxStore((state) =>
-      selectDeckQuestions(state, props.deckId)
+      selectQuestionsByDeckId(state, props.deckId)
     ),
     [loading, setLoading] = useState(false),
     [deleteId, setDeleteId] = useState(-1);
@@ -119,6 +119,7 @@ function QuestionItem(props: IDeckItemProps) {
             size="small"
             onPress={() =>
               props.navigation.navigate(QUESTION_EDIT_SCREEN, {
+                deckId: props.question.deckId,
                 questionId: props.question.id,
               })
             }
@@ -144,8 +145,8 @@ function QuestionDescription(props: IQuestionDescriptionProps) {
   if (isFlashCardQuestion(props.question)) {
     return (
       <>
-        <Text>Front {props.question.front}</Text>
-        <Text>Back {props.question.back}</Text>
+        <Markdown>{props.question.front}</Markdown>
+        <Markdown>{props.question.back}</Markdown>
       </>
     );
   } else {
