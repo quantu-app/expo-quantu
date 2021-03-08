@@ -66,4 +66,4 @@ jobs:
           distPath: ../web-build
           tagName: quantu-latest
           releaseName: QuantU latest
-          prerelease: false
+          prerelease: true
