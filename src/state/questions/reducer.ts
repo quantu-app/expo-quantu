@@ -1,10 +1,11 @@
 import { OrderedSet, RecordOf } from "immutable";
 import { IAction } from "../actions";
 import {
-  questionAllAction,
-  questionCreateAction,
-  questionGetAction,
+  questionsAllAction,
+  questionsCreateAction,
+  questionsGetAction,
   questionsDeleteAction,
+  questionsUpdateAction,
 } from "./actions";
 import {
   IQuestions,
@@ -22,7 +23,7 @@ export function reducer(
   state = INITIAL_STATE,
   action: IAction
 ): RecordOf<IQuestions> {
-  if (questionGetAction.success.is(action)) {
+  if (questionsGetAction.success.is(action)) {
     const question = questionFromJSON(action.payload);
     return state
       .update("byId", (byId) => byId.set(question.id, question))
@@ -30,14 +31,22 @@ export function reducer(
         const questions = byDeckId.get(question.deckId) || OrderedSet();
         return byDeckId.set(question.deckId, questions.add(question));
       });
-  } else if (questionAllAction.success.is(action)) {
+  } else if (questionsAllAction.success.is(action)) {
     const questions = questionsFromJSON(action.payload);
     return state
       .update("byId", (byId) => byId.merge(questionsById(questions)))
       .update("byDeckId", (byDeckId) =>
         byDeckId.merge(questionsByDeckId(questions))
       );
-  } else if (questionCreateAction.success.is(action)) {
+  } else if (questionsCreateAction.success.is(action)) {
+    const question = questionFromJSON(action.payload);
+    return state
+      .update("byId", (byId) => byId.set(question.id, question))
+      .update("byDeckId", (byDeckId) => {
+        const questions = byDeckId.get(question.deckId) || OrderedSet();
+        return byDeckId.set(question.deckId, questions.add(question));
+      });
+  } else if (questionsUpdateAction.success.is(action)) {
     const question = questionFromJSON(action.payload);
     return state
       .update("byId", (byId) => byId.set(question.id, question))

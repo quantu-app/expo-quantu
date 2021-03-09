@@ -29,7 +29,7 @@ export const linking = {
         },
       },
       [QUESTION_EDIT_SCREEN]: {
-        path: "/decks/:deckId/:questionId/edit",
+        path: "/decks/:deckId/questions/:questionId/edit",
         parse: {
           deckId: parseInt,
           questionId: parseInt,

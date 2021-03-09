@@ -14,7 +14,7 @@ function wait(ms: number) {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 }
 
-export async function decksGet(id: number, force = false) {
+export async function decksGet(id: number, force = true) {
   if (!force || selectDeckById(store.getState(), id)) {
     return;
   }
@@ -76,23 +76,7 @@ export async function decksUpdate(id: number, deck: Partial<IDeckJSON>) {
   );
 }
 
-export const debouncedDecksUpdate = debounce(
-  async (id: number, deck: Partial<IDeckJSON>) => {
-    store.dispatch(decksUpdateAction.pending.create({ id, deck }));
-    await wait(1000);
-    store.dispatch(
-      decksUpdateAction.success.create({
-        id: 1,
-        creator_id: "487a1226-7728-4bb8-96fa-c5d428b9b98a",
-        name: "Test",
-        created_at: "2021-03-06T13:47:55.580Z",
-        ...deck,
-        updated_at: new Date().toJSON(),
-      })
-    );
-  },
-  1000
-);
+export const debouncedDecksUpdate = debounce(decksUpdate, 1000);
 
 export async function decksDelete(deckId: number) {
   store.dispatch(decksDeleteAction.pending.create(deckId));
