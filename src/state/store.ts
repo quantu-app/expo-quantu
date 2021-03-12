@@ -69,8 +69,7 @@ export function createStore<T>(
   timeout = DEFAULT_TIMEOUT
 ) {
   const nodeId = getNodeId(),
-    savedValue =
-      typeof localStorage === "object" && localStorage?.getItem(name),
+    savedValue = typeof localStorage === "object" && localStorage.getItem(name),
     state = savedValue
       ? Automerge.load<T>(savedValue, nodeId)
       : Automerge.from<T>(initialState, nodeId);

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "@sapper/app";
   import {
     NavigationDrawer,
     List,
@@ -37,10 +38,10 @@
         <Icon path={mdiAccount} />
       </Button>
     </div>
-    <ListItem href="."
+    <ListItem on:click={() => goto("/")}
       ><span slot="prepend"><Icon path={mdiHome} /></span> Home</ListItem
     >
-    <ListItem href="/account"
+    <ListItem on:click={() => goto("/account")}
       ><span slot="prepend"><Icon path={mdiAccount} /></span> Account</ListItem
     >
     <ListItem
@@ -51,19 +52,19 @@
 <NavigationDrawer absolute {active}>
   <List nav>
     <ListItem />
-    <ListItem href=".">
+    <ListItem on:click={() => goto("/")}>
       <span slot="prepend">
         <Icon path={mdiHome} />
       </span>
       Home
     </ListItem>
-    <ListItem href="/decks">
+    <ListItem on:click={() => goto("/decks")}>
       <span slot="prepend">
         <Icon path={mdiAccount} />
       </span>
       Decks
     </ListItem>
-    <ListItem href="/account">
+    <ListItem on:click={() => goto("/account")}>
       <span slot="prepend">
         <Icon path={mdiAccount} />
       </span>

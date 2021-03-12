@@ -49,8 +49,9 @@ async function fetchAndCache(request: Request) {
 }
 
 (self as any).addEventListener("fetch", (event: FetchEvent) => {
-  if (event.request.method !== "GET" || event.request.headers.has("range"))
+  if (event.request.method !== "GET" || event.request.headers.has("range")) {
     return;
+  }
 
   const url = new URL(event.request.url);
 
