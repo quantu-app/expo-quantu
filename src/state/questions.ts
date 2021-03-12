@@ -15,8 +15,8 @@ interface IQuestionBase {
 }
 
 export interface IFlashCardQuestion extends IQuestionBase {
-  front: "";
-  back: "";
+  front: string;
+  back: string;
 }
 
 export type IQuestion = IFlashCardQuestion;
@@ -37,8 +37,8 @@ export function createQuestion(type: QuestionType, deckId: string) {
       deckId,
       createdAt: now,
       updatedAt: now,
-      front: "",
-      back: "",
+      front: "# Front",
+      back: "# Back",
     });
   }, `Create ${type} Question`);
   return id;

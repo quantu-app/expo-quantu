@@ -52,8 +52,8 @@ export class Store<T> {
   subscribe(
     subscription: (value: Automerge.FreezeObject<T>) => void
   ): () => void {
-    subscription(this.state);
     this.subscriptions.push(subscription);
+    subscription(this.state);
     return () => {
       const index = this.subscriptions.indexOf(subscription);
       if (index === -1) {
@@ -68,10 +68,10 @@ export function createStore<T>(
   initialState: T,
   timeout = DEFAULT_TIMEOUT
 ) {
-  const nodeId = getNodeId(),
-    savedValue = typeof localStorage === "object" && localStorage.getItem(name),
+  const savedValue =
+      typeof localStorage === "object" && localStorage.getItem(name),
     state = savedValue
-      ? Automerge.load<T>(savedValue, nodeId)
-      : Automerge.from<T>(initialState, nodeId);
+      ? Automerge.load<T>(savedValue, getNodeId())
+      : Automerge.from<T>(initialState, getNodeId());
   return new Store<T>(name, state, timeout);
 }

@@ -20,6 +20,7 @@
     "@aicacia/debounce": "^0.1.9",
     "automerge": "^0.14.2",
     "compression": "^1.7.1",
+    "marked": "^2.0.1",
     "polka": "next",
     "sirv": "^1.0.0"
   },
@@ -38,6 +39,7 @@
     "@rollup/plugin-url": "^5.0.0",
     "@tsconfig/svelte": "^1.0.10",
     "@types/compression": "^1.7.0",
+    "@types/marked": "^2.0.0",
     "@types/node": "^14.11.1",
     "@types/polka": "^0.5.1",
     "husky": "^4.3.8",
