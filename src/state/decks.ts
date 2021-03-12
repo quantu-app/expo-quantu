@@ -8,13 +8,13 @@ export interface IDeck {
   updatedAt: string;
 }
 
-export const decks = createStore("decks", {
+export const deckStore = createStore("decks", {
   table: new Automerge.Table<IDeck>(),
 });
 
 export function createDeck(name: string) {
   let id: string | undefined;
-  decks.update((state) => {
+  deckStore.update((state) => {
     const now = new Date().toJSON();
     id = state.table.add({
       name,
@@ -26,7 +26,7 @@ export function createDeck(name: string) {
 }
 
 export function updateDeck(id: string, deck: Partial<IDeck>) {
-  decks.update((state) => {
+  deckStore.update((state) => {
     const row = state.table.byId(id);
     if (deck.name) {
       row.name = deck.name;
@@ -38,7 +38,7 @@ export function updateDeck(id: string, deck: Partial<IDeck>) {
 export const updateDeckDebounced = debounce(updateDeck, 1000);
 
 export function deleteDeck(id: string) {
-  decks.update((state) => {
+  deckStore.update((state) => {
     state.table.remove(id);
   }, `Delete Deck ${id}`);
 }

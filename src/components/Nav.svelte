@@ -22,6 +22,10 @@
   function open() {
     active = true;
   }
+  function navigate(path: string) {
+    close();
+    goto(path);
+  }
 </script>
 
 <AppBar>
@@ -38,10 +42,10 @@
         <Icon path={mdiAccount} />
       </Button>
     </div>
-    <ListItem on:click={() => goto("/")}
+    <ListItem on:click={() => navigate("/")}
       ><span slot="prepend"><Icon path={mdiHome} /></span> Home</ListItem
     >
-    <ListItem on:click={() => goto("/account")}
+    <ListItem on:click={() => navigate("/account")}
       ><span slot="prepend"><Icon path={mdiAccount} /></span> Account</ListItem
     >
     <ListItem
@@ -52,19 +56,19 @@
 <NavigationDrawer absolute {active}>
   <List nav>
     <ListItem />
-    <ListItem on:click={() => goto("/")}>
+    <ListItem on:click={() => navigate("/")}>
       <span slot="prepend">
         <Icon path={mdiHome} />
       </span>
       Home
     </ListItem>
-    <ListItem on:click={() => goto("/decks")}>
+    <ListItem on:click={() => navigate("/decks")}>
       <span slot="prepend">
         <Icon path={mdiAccount} />
       </span>
       Decks
     </ListItem>
-    <ListItem on:click={() => goto("/account")}>
+    <ListItem on:click={() => navigate("/account")}>
       <span slot="prepend">
         <Icon path={mdiAccount} />
       </span>

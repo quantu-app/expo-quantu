@@ -1,6 +1,6 @@
 import { debounce } from "@aicacia/debounce";
 import Automerge from "automerge";
-import { decks } from "./decks";
+import { deckStore } from "./decks";
 import { createStore } from "./store";
 
 export enum QuestionType {
@@ -21,16 +21,16 @@ export interface IFlashCardQuestion extends IQuestionBase {
 
 export type IQuestion = IFlashCardQuestion;
 
-export const questions = createStore("questions", {
+export const questionStore = createStore("questions", {
   table: new Automerge.Table<IQuestion>(),
 });
 
 export function createQuestion(type: QuestionType, deckId: string) {
-  if (!decks.getState().table.byId(deckId)) {
+  if (!deckStore.getState().table.byId(deckId)) {
     throw new Error(`Deck ${deckId} does not exists`);
   }
   let id: string | undefined;
-  questions.update((state) => {
+  questionStore.update((state) => {
     const now = new Date().toJSON();
     id = state.table.add({
       type,
@@ -45,7 +45,7 @@ export function createQuestion(type: QuestionType, deckId: string) {
 }
 
 export function updateQuestion(id: string, question: Partial<IQuestion>) {
-  questions.update((state) => {
+  questionStore.update((state) => {
     const row = state.table.byId(id);
     if (question.front) {
       row.front = question.front;
@@ -60,7 +60,7 @@ export function updateQuestion(id: string, question: Partial<IQuestion>) {
 export const updateQuestionDebounced = debounce(updateQuestion, 1000);
 
 export function deleteQuestion(id: string) {
-  questions.update((state) => {
+  questionStore.update((state) => {
     state.table.remove(id);
   }, `Delete Deck ${id}`);
 }

@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { goto } from "@sapper/app";
   import { TextField, Button, Icon, ListItem } from "svelte-materialify";
   import { mdiPen, mdiPlus, mdiTrashCan } from "@mdi/js";
-  import { createDeck, decks } from "../state/decks";
+  import { createDeck, deckStore, deleteDeck } from "../state/decks";
 
-  const deckState = $decks;
   let name = "";
 </script>
 
@@ -16,14 +16,14 @@
   <Icon path={mdiPlus} />
 </Button>
 
-{#each deckState.table.rows as deck}
+{#each $deckStore.table.rows as deck}
   <ListItem>
     {deck.name}
     <span slot="append">
-      <Button href={`/decks/${deck.id}/edit`}>
+      <Button on:click={() => goto(`/decks/${deck.id}/edit`)}>
         <Icon path={mdiPen} />
       </Button>
-      <Button on:click={() => console.log(`Delete ${deck.id}`)}>
+      <Button on:click={() => deleteDeck(deck.id)}>
         <Icon path={mdiTrashCan} />
       </Button>
     </span>

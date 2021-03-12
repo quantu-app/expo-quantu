@@ -12,7 +12,7 @@ export class Store<T> {
   private name: string;
   private state: Automerge.FreezeObject<T>;
   private debouncedPersist: () => void;
-  private subscribers: Array<(state: Automerge.FreezeObject<T>) => void> = [];
+  private subscriptions: Array<(state: Automerge.FreezeObject<T>) => void> = [];
 
   constructor(name: string, state: Automerge.FreezeObject<T>, timeout: number) {
     this.name = name;
@@ -29,17 +29,17 @@ export class Store<T> {
     return this.state;
   }
 
-  private emit() {
-    const subscribers = this.subscribers.slice();
-    for (const subscriber of subscribers) {
-      subscriber(this.state);
+  private emit(state: Automerge.FreezeObject<T>) {
+    const subscriptions = this.subscriptions.slice();
+    for (const subscription of subscriptions) {
+      subscription(state);
     }
     return this;
   }
 
   setState(state: Automerge.FreezeObject<T>) {
     this.state = state;
-    this.emit();
+    this.emit(state);
     this.debouncedPersist();
     return this;
   }
@@ -53,11 +53,11 @@ export class Store<T> {
     subscription: (value: Automerge.FreezeObject<T>) => void
   ): () => void {
     subscription(this.state);
-    this.subscribers.push(subscription);
+    this.subscriptions.push(subscription);
     return () => {
-      const index = this.subscribers.indexOf(subscription);
+      const index = this.subscriptions.indexOf(subscription);
       if (index === -1) {
-        this.subscribers.splice(index, 1);
+        this.subscriptions.splice(index, 1);
       }
     };
   }
