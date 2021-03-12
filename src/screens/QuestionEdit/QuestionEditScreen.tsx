@@ -3,11 +3,11 @@ import { Async } from "@aicacia/async_component-react";
 import { JSError } from "../../JSError";
 import { Loading } from "../../Loading";
 import { Container } from "../../Container";
-import { DECK_EDIT_SCREEN, ParamList } from "../../navigationConfig";
+import { ParamList, QUESTION_EDIT_SCREEN } from "../../navigationConfig";
 import { RouteProp } from "@react-navigation/core";
 
 export function QuestionEditScreen(props: {
-  route: RouteProp<ParamList, typeof DECK_EDIT_SCREEN>;
+  route: RouteProp<ParamList, typeof QUESTION_EDIT_SCREEN>;
 }) {
   return (
     <Container>

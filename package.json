@@ -26,16 +26,18 @@
   },
   "dependencies": {
     "@aicacia/async_component-react": "^0.1.5",
+    "@aicacia/core": "^0.1.20",
     "@aicacia/debounce": "^0.1.9",
     "@aicacia/json": "^0.1.8",
     "@aicacia/use-redux": "^0.1.0",
     "@eva-design/eva": "^2.0.0",
-    "@react-native-async-storage/async-storage": "^1.13.4",
+    "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/drawer": "^5.12.3",
     "@react-navigation/native": "^5.9.2",
     "@ui-kitten/components": "^5.0.0",
     "@ui-kitten/eva-icons": "^5.0.0",
+    "automerge": "^0.14.2",
     "draft-js": "^0.11.7",
     "expo": "^40.0.1",
     "expo-splash-screen": "~0.8.1",
@@ -57,7 +59,8 @@
     "react-native-web": "~0.13.12",
     "react-native-webview": "11.0.0",
     "redux": "^4.0.5",
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "shallow-equals": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -67,6 +70,7 @@
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "@types/react-native-canvas": "^0.1.5",
+    "@types/shallow-equals": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "@ui-kitten/metro-config": "^5.0.0",

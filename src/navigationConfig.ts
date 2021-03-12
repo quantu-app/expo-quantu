@@ -8,11 +8,11 @@ export type ParamList = {
   [HOME_SCREEN]: Record<string, unknown>;
   [DECKS_SCREEN]: Record<string, unknown>;
   [DECK_EDIT_SCREEN]: {
-    deckId: number;
+    deckId: string;
   };
   [QUESTION_EDIT_SCREEN]: {
-    deckId: number;
-    questionId: number;
+    deckId: string;
+    questionId: string;
   };
 };
 
@@ -22,19 +22,8 @@ export const linking = {
     screens: {
       [HOME_SCREEN]: "",
       [DECKS_SCREEN]: "/decks",
-      [DECK_EDIT_SCREEN]: {
-        path: "/decks/:deckId/edit",
-        parse: {
-          deckId: parseInt,
-        },
-      },
-      [QUESTION_EDIT_SCREEN]: {
-        path: "/decks/:deckId/questions/:questionId/edit",
-        parse: {
-          deckId: parseInt,
-          questionId: parseInt,
-        },
-      },
+      [DECK_EDIT_SCREEN]: "/decks/:deckId/edit",
+      [QUESTION_EDIT_SCREEN]: "/decks/:deckId/questions/:questionId/edit",
     },
   },
 };

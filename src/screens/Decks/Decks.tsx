@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { View } from "react-native";
 import {
   Text,
@@ -9,40 +9,32 @@ import {
   Input,
   Divider,
 } from "@ui-kitten/components";
-import { decksAllForCreator, decksDelete } from "../../state/decks/functions";
-import { useReduxStore } from "../../state";
-import { selectUser } from "../../state/user/selectors";
-import { selectDecks } from "../../state/decks/selectors";
-import { RecordOf } from "immutable";
-import { IDeck } from "../../state/decks/definitions";
 import { NavigationProp, useNavigation } from "@react-navigation/core";
 import { DECK_EDIT_SCREEN } from "../../navigationConfig";
 import { ModalSmall } from "../../Modal";
+import { createDeck, deleteDeck, IDeck, useDecks } from "../../state/decks";
+import { TableRow } from "automerge";
 
 export function Decks() {
-  const user = useReduxStore(selectUser),
-    decks = useReduxStore(selectDecks),
+  const decks = useDecks((state) => state.table.rows),
     navigation = useNavigation(),
     [search, setSearch] = useState(""),
-    [deleteId, setDeleteId] = useState(-1),
-    [filteredDecks, setFilteredDecks] = useState<RecordOf<IDeck>[]>([]);
+    [deleteId, setDeleteId] = useState<string | undefined>(),
+    [filteredDecks, setFilteredDecks] = useState<IDeck[]>([]);
 
   useMemo(
     () =>
       setFilteredDecks(
-        decks
-          .filter((deck) =>
-            deck.name.toLowerCase().includes(search.toLowerCase())
-          )
-          .toArray()
+        decks.filter((deck) =>
+          deck.name.toLowerCase().includes(search.toLowerCase())
+        )
       ),
     [decks, search]
   );
 
-  useMemo(() => decksAllForCreator(user.id), [user.id]);
-
   return (
     <View>
+      <CreateDeck />
       <Input
         accessoryLeft={(props) => <Icon {...props} name="search-outline" />}
         accessoryRight={(props) => (
@@ -70,22 +62,45 @@ export function Decks() {
         )}
       />
       <DeleteModal
-        deck={
-          deleteId !== -1
-            ? decks.find((deck) => deck.id === deleteId)
-            : undefined
-        }
-        onDelete={() => decksDelete(deleteId)}
-        onClose={() => setDeleteId(-1)}
+        deck={deleteId ? decks.find((deck) => deck.id === deleteId) : undefined}
+        onDelete={() => deleteId && deleteDeck(deleteId)}
+        onClose={() => setDeleteId(undefined)}
       />
     </View>
   );
 }
 
+function CreateDeck() {
+  const [name, setName] = useState("");
+
+  const onCreateDeck = useCallback(() => {
+    setName("");
+    createDeck(name);
+  }, [name]);
+
+  return (
+    <Input
+      label="New Deck Name"
+      accessoryRight={(props) => (
+        <Button
+          {...props}
+          size="small"
+          status="success"
+          disabled={!name}
+          onPress={onCreateDeck}
+          accessoryRight={(props) => <Icon {...props} name="plus-outline" />}
+        />
+      )}
+      value={name}
+      onChangeText={setName}
+    />
+  );
+}
+
 interface IDeckItemProps {
-  deck: RecordOf<IDeck>;
+  deck: IDeck & TableRow;
   navigation: NavigationProp<any>;
-  setDeleteId(id: number): void;
+  setDeleteId(id: string): void;
 }
 
 function DeckItem(props: IDeckItemProps) {
@@ -117,7 +132,7 @@ function DeckItem(props: IDeckItemProps) {
 }
 
 interface IDeleteModalProps {
-  deck?: RecordOf<IDeck>;
+  deck?: IDeck;
   onClose(): void;
   onDelete(): void;
 }

@@ -26,11 +26,7 @@ import {
   DECK_EDIT_SCREEN,
   QUESTION_EDIT_SCREEN,
 } from "./navigationConfig";
-import { useReduxStore } from "./state";
-import { selectIsSignedIn, selectUser } from "./state/user/selectors";
 import app from "../app.json";
-import { RecordOf } from "immutable";
-import { ICurrentUser } from "./state/user/definitions";
 import {
   Button,
   Layout,
@@ -43,8 +39,6 @@ import {
   OverflowMenu,
   MenuItem,
 } from "@ui-kitten/components";
-import { userSetSignInUpModal } from "./state/user/functions";
-import { SignInUp } from "./SignInUp";
 import { DecksScreen } from "./screens/Decks/DecksScreen";
 import { DeckEditScreen } from "./screens/DeckEdit/DeckEditScreen";
 import { QuestionEditScreen } from "./screens/QuestionEdit/QuestionEditScreen";
@@ -101,22 +95,15 @@ export function Navigation() {
 }
 
 function NavigationDrawer() {
-  const isSignedIn = useReduxStore(selectIsSignedIn),
-    user = useReduxStore(selectUser);
-
   return (
     <Navigator
       initialRouteName={DEFAULT_SCREEN}
       screenOptions={{
         headerShown: true,
-        header: (props) => (
-          <Header {...props} user={user} isSignedIn={isSignedIn} />
-        ),
+        header: (props) => <Header {...props} />,
       }}
       drawerType="front"
-      drawerContent={(props) => (
-        <DrawerContent {...props} isSignedIn={isSignedIn} />
-      )}
+      drawerContent={(props) => <DrawerContent {...props} />}
       detachInactiveScreens
     >
       <Screen name={HOME_SCREEN} component={HomeScreen} />
@@ -135,76 +122,53 @@ const headerStyles = StyleSheet.create({
   },
 });
 
-interface IDrawerHeaderProps extends DrawerHeaderProps {
-  user: RecordOf<ICurrentUser>;
-  isSignedIn: boolean;
-}
-
-const Header = memo(
-  (props: IDrawerHeaderProps) => {
-    return (
-      <SafeAreaView>
-        <Layout style={headerStyles.container}>
-          <TopNavigation
-            alignment="start"
-            title={() => (
-              <Button
-                appearance="ghost"
+const Header = memo((props: DrawerHeaderProps) => {
+  return (
+    <SafeAreaView>
+      <Layout style={headerStyles.container}>
+        <TopNavigation
+          alignment="start"
+          title={() => (
+            <Button
+              appearance="ghost"
+              onPress={() =>
+                props.scene.descriptor.navigation.navigate(HOME_SCREEN)
+              }
+            >
+              {`${app.displayName} v${app.expo.version}`}
+            </Button>
+          )}
+          accessoryLeft={(accessoryProps) => (
+            <>
+              <TopNavigationAction
+                {...accessoryProps}
                 onPress={() =>
-                  props.scene.descriptor.navigation.navigate(HOME_SCREEN)
+                  (props.scene.descriptor.navigation as any).openDrawer()
                 }
-              >
-                {`${app.displayName} v${app.expo.version}`}
-              </Button>
-            )}
-            accessoryLeft={(accessoryProps) => (
-              <>
+                icon={(props) => <Icon {...props} name="menu-outline" />}
+              />
+              {props.scene.descriptor.navigation.canGoBack() && (
                 <TopNavigationAction
                   {...accessoryProps}
-                  onPress={() =>
-                    (props.scene.descriptor.navigation as any).openDrawer()
-                  }
-                  icon={(props) => <Icon {...props} name="menu-outline" />}
+                  onPress={() => props.scene.descriptor.navigation.goBack()}
+                  icon={(props) => (
+                    <Icon {...props} name="arrow-back-outline" />
+                  )}
                 />
-                {props.scene.descriptor.navigation.canGoBack() && (
-                  <TopNavigationAction
-                    {...accessoryProps}
-                    onPress={() => props.scene.descriptor.navigation.goBack()}
-                    icon={(props) => (
-                      <Icon {...props} name="arrow-back-outline" />
-                    )}
-                  />
-                )}
-              </>
-            )}
-            accessoryRight={
-              props.isSignedIn
-                ? () => (
-                    <Account navigation={props.scene.descriptor.navigation} />
-                  )
-                : () => (
-                    <TopNavigationAction
-                      onPress={() => userSetSignInUpModal(true)}
-                      accessibilityHint="Log in"
-                      icon={(props) => (
-                        <Icon {...props} name="log-in-outline" />
-                      )}
-                    />
-                  )
-            }
-          />
-          <SignInUp />
-        </Layout>
-      </SafeAreaView>
-    );
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.isSignedIn === nextProps.isSignedIn &&
-      prevProps.user === nextProps.user
-    );
-  }
-);
+              )}
+            </>
+          )}
+          accessoryRight={(accessoryProps) => (
+            <Account
+              {...accessoryProps}
+              navigation={props.scene.descriptor.navigation}
+            />
+          )}
+        />
+      </Layout>
+    </SafeAreaView>
+  );
+});
 
 interface IAccountProps {
   navigation: NavigationProp<any>;
@@ -247,11 +211,6 @@ const Account = memo((props: IAccountProps) => {
   );
 });
 
-interface IDrawerContentProps
-  extends DrawerContentComponentProps<DrawerContentOptions> {
-  isSignedIn: boolean;
-}
-
 function mapStateIndexToListed(index: number) {
   switch (index) {
     default:
@@ -260,7 +219,7 @@ function mapStateIndexToListed(index: number) {
 }
 
 const DrawerContent = memo(
-  (props: IDrawerContentProps) => {
+  (props: DrawerContentComponentProps<DrawerContentOptions>) => {
     return (
       <DrawerContentScrollView {...props}>
         <Drawer
@@ -280,12 +239,6 @@ const DrawerContent = memo(
           />
         </Drawer>
       </DrawerContentScrollView>
-    );
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.isSignedIn === nextProps.isSignedIn &&
-      prevProps.state.index === nextProps.state.index
     );
   }
 );
