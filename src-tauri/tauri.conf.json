@@ -1,7 +1,7 @@
 {
   "build": {
-    "distDir": "../web-build",
-    "devPath": "http://localhost:19006",
+    "distDir": "../__sapper__/export",
+    "devPath": "http://localhost:3000",
     "beforeDevCommand": "",
     "beforeBuildCommand": ""
   },

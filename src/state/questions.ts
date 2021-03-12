@@ -21,7 +21,7 @@ export interface IFlashCardQuestion extends IQuestionBase {
 
 export type IQuestion = IFlashCardQuestion;
 
-export const [questions, useQuestions] = createStore("questions", {
+export const questions = createStore("questions", {
   table: new Automerge.Table<IQuestion>(),
 });
 

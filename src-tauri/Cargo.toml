@@ -1,11 +1,11 @@
 [package]
-name = "quant-u"
+name = "quantu"
 version = "0.1.0"
-description = "A Tauri App"
-authors = [ "you" ]
+description = "QuantU"
+authors = ["nathanfaucett@gmail.com"]
 license = ""
 repository = ""
-default-run = "quant-u"
+default-run = "quantu"
 edition = "2018"
 build = "src/build.rs"
 
@@ -22,5 +22,5 @@ embedded-server = [ "tauri/embedded-server" ]
 no-server = [ "tauri/no-server" ]
 
 [[bin]]
-name = "quant-u"
+name = "quantu"
 path = "src/main.rs"

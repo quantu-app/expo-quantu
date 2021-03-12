@@ -18,15 +18,12 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - run: npm i
-      - run: npm install json -g
-      - run: json -I -f package.json -e 'this.homepage="https://quantu.app/"'
-      - run: npm run build.web
-      - run: cp web/404.html web-build
+      - run: npm run export
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./web-build
+          publish_dir: __sapper__/export
           cname: quantu.app
 
   desktop:
@@ -56,8 +53,7 @@ jobs:
           sudo apt-get install -y webkit2gtk-4.0
 
       - run: npm i
-      - run: npm run build.web
-      - run: cp web/404.html web-build
+      - run: npm run export
 
       - uses: tauri-apps/tauri-action@v0
         env:

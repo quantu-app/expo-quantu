@@ -8,7 +8,7 @@ export interface IDeck {
   updatedAt: string;
 }
 
-export const [decks, useDecks] = createStore("decks", {
+export const decks = createStore("decks", {
   table: new Automerge.Table<IDeck>(),
 });
 
