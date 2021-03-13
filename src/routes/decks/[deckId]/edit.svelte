@@ -8,6 +8,9 @@
   import marked from "marked";
   import { goto } from "@sapper/app";
   import {
+    Row,
+    Col,
+    Select,
     Button,
     Icon,
     ListItem,
@@ -31,28 +34,39 @@
   function onChangeName() {
     updateDeckDebounced(deckId, { name });
   }
+
+  const questionTypes = [{ name: "Flash Card", value: QuestionType.FlashCard }];
+  let questionType = [questionTypes[0].value];
 </script>
 
 <svelte:head>
   <title>Decks</title>
 </svelte:head>
 
-<Button text class="mb-4" on:click={() => goto("/decks")}
+<Button text on:click={() => goto("/decks")}
   ><Icon class="mr-2" path={mdiArrowLeft} /> Back</Button
 >
 
-<TextField bind:value={name} on:input={onChangeName}>
-  Edit Deck Name
-  <Button
-    fab
-    size="small"
-    slot="append-outer"
-    class="green white-text"
-    on:click={() => createQuestion(QuestionType.FlashCard, deckId)}
-  >
-    <Icon path={mdiPlus} />
-  </Button>
-</TextField>
+<TextField class="mt-4" bind:value={name} on:input={onChangeName}
+  >Edit Deck Name</TextField
+>
+
+<div class="mt-4 container">
+  <Row>
+    <Col sm={11}>
+      <Select items={questionTypes} bind:value={questionType}>New Type</Select>
+    </Col>
+    <Col sm={1}>
+      <Button
+        block
+        class="green white-text"
+        on:click={() => createQuestion(questionType[0], deckId)}
+      >
+        Create <Icon class="ml-2" path={mdiPlus} />
+      </Button>
+    </Col>
+  </Row>
+</div>
 
 {#each $questionStore.table.rows.filter((question) => question.deckId === deckId) as question}
   <ListItem>

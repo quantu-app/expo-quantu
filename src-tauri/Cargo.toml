@@ -2,7 +2,7 @@
 name = "quantu"
 version = "0.1.0"
 description = "QuantU"
-authors = ["nathanfaucett@gmail.com"]
+authors = [ "nathanfaucett@gmail.com" ]
 license = ""
 repository = ""
 default-run = "quantu"
