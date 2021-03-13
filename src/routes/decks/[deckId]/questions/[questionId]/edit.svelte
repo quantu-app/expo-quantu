@@ -58,8 +58,8 @@
 <Divider class="mb-4" />
 
 <div class="container">
-  <Row class="align-center">
-    <Col offset={4} cols={4}>
+  <Row class="justify-center">
+    <Col md={6}>
       <div>
         <Textarea
           bind:value={front}
