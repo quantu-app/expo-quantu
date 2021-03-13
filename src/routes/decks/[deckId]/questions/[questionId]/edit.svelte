@@ -24,7 +24,7 @@
     updateQuestionDebounced,
   } from "../../../../../state/questions";
   import { deckStore } from "../../../../../state/decks";
-  import { mdiArrowLeft, mdiTableRow } from "@mdi/js";
+  import { mdiArrowLeft } from "@mdi/js";
 
   export let deckId: string;
   export let questionId: string;
