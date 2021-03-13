@@ -1,3 +1,4 @@
 {
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "svelte.plugin.svelte.format.config.svelteBracketNewLine": false
 }

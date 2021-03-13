@@ -12,8 +12,6 @@
   } from "svelte-materialify";
   import { mdiMenu, mdiAccount, mdiHome, mdiLogout } from "@mdi/js";
 
-  export let segment: string;
-
   let active = false;
 
   function close() {
@@ -34,7 +32,7 @@
       <Icon path={mdiMenu} />
     </Button>
   </div>
-  <span slot="title">QuantU {segment || ""}</span>
+  <Button slot="title" on:click={() => goto("/")} text>QuantU</Button>
   <div style="flex-grow:1" />
   <Menu right>
     <div slot="activator">

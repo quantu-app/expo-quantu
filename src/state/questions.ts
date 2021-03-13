@@ -1,6 +1,5 @@
 import { debounce } from "@aicacia/debounce";
 import Automerge from "automerge";
-import { deckStore } from "./decks";
 import { createStore } from "./store";
 
 export enum QuestionType {
@@ -37,8 +36,8 @@ export function createQuestion(type: QuestionType, deckId: string) {
       deckId,
       createdAt: now,
       updatedAt: now,
-      front: "# Front",
-      back: "# Back",
+      front: "Front",
+      back: "Back",
     });
   }, `Create ${type} Question`);
   return id;
@@ -64,3 +63,5 @@ export function deleteQuestion(id: string) {
     state.table.remove(id);
   }, `Delete Deck ${id}`);
 }
+
+import { deckStore } from "./decks";

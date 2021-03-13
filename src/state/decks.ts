@@ -1,5 +1,6 @@
 import { debounce } from "@aicacia/debounce";
 import Automerge from "automerge";
+import { questionStore } from "./questions";
 import { createStore } from "./store";
 
 export interface IDeck {
@@ -38,6 +39,11 @@ export function updateDeck(id: string, deck: Partial<IDeck>) {
 export const updateDeckDebounced = debounce(updateDeck, 1000);
 
 export function deleteDeck(id: string) {
+  questionStore.update((state) => {
+    for (const row of state.table.rows.filter((row) => row.deckId === id)) {
+      state.table.remove(row.id);
+    }
+  }, `Delete Deck ${id}`);
   deckStore.update((state) => {
     state.table.remove(id);
   }, `Delete Deck ${id}`);
