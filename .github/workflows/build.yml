@@ -19,6 +19,7 @@ jobs:
 
       - run: npm i
       - run: npm run export
+      - run: cp static/404.html __sapper__/export
 
       - uses: peaceiris/actions-gh-pages@v3
         with:
